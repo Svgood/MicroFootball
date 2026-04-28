@@ -3,6 +3,7 @@ using _Assets.Scripts.Common;
 using _Assets.Scripts.Configs;
 using _Assets.Scripts.Services;
 using UniRx;
+using UnityEngine;
 using Zenject;
 using Object = UnityEngine.Object;
 
@@ -46,6 +47,8 @@ namespace _Assets.Scripts.Menu
                     .Subscribe(_ => _model.RequestStart())
                     .AddTo(_customDisposable);
             }
+
+            _customDisposable.OnDisposal(() => Debug.Log("MenuPresenter disposed"));
         }
     }
 }

@@ -12,7 +12,7 @@ namespace _Assets.Scripts.Menu
 
         public override void InstallBindings()
         {
-            Container.Rebind<CustomDisposable>().AsSingle();
+            Container.BindInterfacesAndSelfTo<CustomDisposable>().AsSingle();
             Container.BindInstance(_settings).IfNotBound();
             Container.BindInstance(_view).IfNotBound();
 

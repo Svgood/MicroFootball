@@ -17,6 +17,13 @@ namespace _Assets.Scripts.Common
             _compositeDisposable.Clear();
         }
 
+        public IDisposable OnDisposal(Action onDisposal)
+        {
+            var disposable = Disposable.Create(onDisposal);
+            _compositeDisposable.Add(disposable);
+            return disposable;
+        }
+
         public void Dispose()
         {
             _compositeDisposable.Dispose();

@@ -15,7 +15,7 @@ namespace _Assets.Scripts.Gameplay
 
         public override void InstallBindings()
         {
-            Container.Rebind<CustomDisposable>().AsSingle();
+            Container.BindInterfacesAndSelfTo<CustomDisposable>().AsSingle();
             Container.BindInstance(_settings);
             Container.BindInstance(_prefabsSettings);
             Container.BindInterfacesAndSelfTo<GameplayView>().FromInstance(Instantiate(_gameplayView));
