@@ -1,9 +1,10 @@
-using MicroFootball.Configs;
+using _Assets.Scripts.Common;
+using _Assets.Scripts.Configs;
+using _Assets.Scripts.Gameplay.Ball;
 using UniRx;
 using UnityEngine;
-using Zenject;
 
-namespace MicroFootball.Gameplay.Model
+namespace _Assets.Scripts.Gameplay.Bot
 {
     public class BotModelFactory : CustomFactory<BotInitDTO, BotModel, BotModel> { }
 
@@ -59,7 +60,7 @@ namespace MicroFootball.Gameplay.Model
             }
 
             var position = Position.Value;
-            position.y = _spawnPosition.y;
+            position.y = 0.4f;
             Position.Value = position;
 
             _kickCooldownLeft = Mathf.Max(0f, _kickCooldownLeft - dt);

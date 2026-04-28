@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
+using Zenject;
 
-namespace Zenject
+namespace _Assets.Scripts.Common
 {
     public class CustomFactory<TInterface, [MeansImplicitUse]TConcrete> : IFactory<TInterface> where TConcrete : TInterface
     {

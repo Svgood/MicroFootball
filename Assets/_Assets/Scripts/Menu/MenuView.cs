@@ -1,10 +1,9 @@
 using System;
 using UniRx;
-using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace MicroFootball.Menu.View
+namespace _Assets.Scripts.Menu
 {
     public sealed class MenuView : MonoBehaviour
     {

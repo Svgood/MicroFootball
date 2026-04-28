@@ -1,55 +1,51 @@
-using MicroFootball.Application.Services;
-using MicroFootball.Configs;
-using MicroFootball.Menu.Model;
-using MicroFootball.Menu.View;
 using System;
+using _Assets.Scripts.Common;
+using _Assets.Scripts.Configs;
+using _Assets.Scripts.Services;
 using UniRx;
 using Zenject;
 using Object = UnityEngine.Object;
 
-namespace MicroFootball.Menu.Presenter
+namespace _Assets.Scripts.Menu
 {
-    public sealed class MenuPresenter : IInitializable, IDisposable
+    public sealed class MenuPresenter : IInitializable
     {
         private readonly MenuModel _model;
         private readonly MenuView _view;
         private readonly MenuSettings _settings;
         private readonly ISceneService _sceneService;
-        private readonly CompositeDisposable _disposables = new CompositeDisposable();
+        private readonly CustomDisposable _customDisposable;
 
         public MenuPresenter(
             MenuModel model,
             MenuView view,
             MenuSettings settings,
-            ISceneService sceneService)
+            ISceneService sceneService,
+            CustomDisposable customDisposable)
         {
             _model = model;
             _view = Object.Instantiate(view);
             _settings = settings;
             _sceneService = sceneService;
+            _customDisposable = customDisposable;
         }
 
         public void Initialize()
         {
             _view.StartClicked
                 .Subscribe(_ => _model.RequestStart())
-                .AddTo(_disposables);
+                .AddTo(_customDisposable);
 
             _model.StartRequested
                 .Subscribe(_ => _sceneService.LoadGameplay())
-                .AddTo(_disposables);
+                .AddTo(_customDisposable);
 
             if (_settings.Autostart)
             {
                 Observable.Timer(TimeSpan.FromSeconds(_settings.AutostartDelaySeconds))
                     .Subscribe(_ => _model.RequestStart())
-                    .AddTo(_disposables);
+                    .AddTo(_customDisposable);
             }
-        }
-
-        public void Dispose()
-        {
-            _disposables.Dispose();
         }
     }
 }

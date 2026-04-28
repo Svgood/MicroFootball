@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace MicroFootball.Gameplay.View
+namespace _Assets.Scripts.Gameplay.Bot
 {
     public sealed class BotView : MonoBehaviour
     {

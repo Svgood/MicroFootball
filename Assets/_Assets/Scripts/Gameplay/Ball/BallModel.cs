@@ -1,9 +1,8 @@
-using MicroFootball.Configs;
-using MicroFootball.Gameplay.View;
+using _Assets.Scripts.Configs;
 using UniRx;
 using UnityEngine;
 
-namespace MicroFootball.Gameplay.Model
+namespace _Assets.Scripts.Gameplay.Ball
 {
     public enum GoalSide
     {

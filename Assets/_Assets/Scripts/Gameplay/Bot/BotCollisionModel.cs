@@ -1,7 +1,7 @@
-using MicroFootball.Configs;
+using _Assets.Scripts.Configs;
 using UnityEngine;
 
-namespace MicroFootball.Gameplay.Model
+namespace _Assets.Scripts.Gameplay.Bot
 {
     public sealed class BotCollisionModel
     {

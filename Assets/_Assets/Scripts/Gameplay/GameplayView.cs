@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-namespace MicroFootball.Gameplay.View
+namespace _Assets.Scripts.Gameplay
 {
     public sealed class GameplayView : MonoBehaviour, IGameplayPositionsProvider
     {

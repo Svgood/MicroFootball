@@ -1,7 +1,7 @@
 using System;
 using UniRx;
 
-namespace MicroFootball.Menu.Model
+namespace _Assets.Scripts.Menu
 {
     public sealed class MenuModel
     {

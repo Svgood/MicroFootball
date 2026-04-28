@@ -1,10 +1,8 @@
-using MicroFootball.Configs;
-using MicroFootball.Gameplay.Model;
-using MicroFootball.Gameplay.View;
+using _Assets.Scripts.Configs;
 using UnityEngine;
 using Zenject;
 
-namespace MicroFootball.Gameplay.Presenter
+namespace _Assets.Scripts.Gameplay
 {
     public sealed class GameplayPresenter : ITickable
     {

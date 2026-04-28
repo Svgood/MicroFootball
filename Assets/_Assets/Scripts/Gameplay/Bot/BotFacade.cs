@@ -1,11 +1,6 @@
-﻿using System;
-using _Assets.Scripts.Gameplay.Bot;
-using MicroFootball.Gameplay.Presenter;
-using MicroFootball.Gameplay.View;
-
-namespace MicroFootball.Gameplay.Model
+﻿namespace _Assets.Scripts.Gameplay.Bot
 {
-    public sealed class BotFacade : IDisposable
+    public sealed class BotFacade
     {
         private readonly BotPresenter _presenter;
 
@@ -19,11 +14,6 @@ namespace MicroFootball.Gameplay.Model
             View = view;
 
             _presenter.Initialize();
-        }
-
-        public void Dispose()
-        {
-            _presenter.Dispose();
         }
     }
 }

@@ -1,4 +1,4 @@
-namespace MicroFootball.Application.Services
+namespace _Assets.Scripts.Services
 {
     public interface ISceneService
     {

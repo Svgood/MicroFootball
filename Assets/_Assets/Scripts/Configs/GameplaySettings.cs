@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace MicroFootball.Configs
+namespace _Assets.Scripts.Configs
 {
     [CreateAssetMenu(
         fileName = "GameplaySettings",

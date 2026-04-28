@@ -1,7 +1,4 @@
-using MicroFootball.Configs;
-using MicroFootball.Gameplay.Model;
-using MicroFootball.Gameplay.Presenter;
-using MicroFootball.Gameplay.View;
+using _Assets.Scripts.Configs;
 using UnityEngine;
 using Zenject;
 

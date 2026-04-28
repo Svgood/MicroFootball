@@ -1,35 +1,29 @@
-using MicroFootball.Gameplay.Model;
-using MicroFootball.Gameplay.View;
-using System;
-using MicroFootball.Configs;
+using _Assets.Scripts.Common;
+using _Assets.Scripts.Configs;
 using UniRx;
 using Zenject;
 using Object = UnityEngine.Object;
 
-namespace MicroFootball.Gameplay.Presenter
+namespace _Assets.Scripts.Gameplay.Ball
 {
-    public sealed class BallPresenter : IInitializable, IDisposable
+    public sealed class BallPresenter : IInitializable
     {
         private readonly BallModel _model;
         private readonly BallView _view;
-        private readonly CompositeDisposable _disposables = new CompositeDisposable();
+        private readonly CustomDisposable _customDisposable;
 
-        public BallPresenter(BallModel model, PrefabsSettings prefabsSettings)
+        public BallPresenter(BallModel model, PrefabsSettings prefabsSettings, CustomDisposable customDisposable)
         {
             _model = model;
             _view = Object.Instantiate(prefabsSettings.BallView);
+            _customDisposable = customDisposable;
         }
 
         public void Initialize()
         {
             _model.Position
                 .Subscribe(position => _view.Position = position)
-                .AddTo(_disposables);
-        }
-
-        public void Dispose()
-        {
-            _disposables.Dispose();
+                .AddTo(_customDisposable);
         }
     }
 }

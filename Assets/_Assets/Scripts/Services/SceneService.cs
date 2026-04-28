@@ -1,7 +1,7 @@
-using MicroFootball.Configs;
+using _Assets.Scripts.Configs;
 using UnityEngine.SceneManagement;
 
-namespace MicroFootball.Application.Services
+namespace _Assets.Scripts.Services
 {
     public sealed class SceneService : ISceneService
     {

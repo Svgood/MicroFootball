@@ -1,12 +1,11 @@
+using _Assets.Scripts.Common;
+using _Assets.Scripts.Configs;
+using _Assets.Scripts.Gameplay.Ball;
 using _Assets.Scripts.Gameplay.Bot;
-using MicroFootball.Configs;
-using MicroFootball.Gameplay.Model;
-using MicroFootball.Gameplay.Presenter;
-using MicroFootball.Gameplay.View;
 using UnityEngine;
 using Zenject;
 
-namespace MicroFootball.Gameplay.Installers
+namespace _Assets.Scripts.Gameplay
 {
     public sealed class GameplayInstaller : MonoInstaller
     {
@@ -16,6 +15,7 @@ namespace MicroFootball.Gameplay.Installers
 
         public override void InstallBindings()
         {
+            Container.Rebind<CustomDisposable>().AsSingle();
             Container.BindInstance(_settings);
             Container.BindInstance(_prefabsSettings);
             Container.BindInterfacesAndSelfTo<GameplayView>().FromInstance(Instantiate(_gameplayView));

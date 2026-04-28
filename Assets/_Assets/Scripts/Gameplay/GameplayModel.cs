@@ -1,10 +1,8 @@
+using _Assets.Scripts.Gameplay.Ball;
 using _Assets.Scripts.Gameplay.Bot;
-using MicroFootball.Configs;
-using MicroFootball.Gameplay.View;
 using UniRx;
-using Zenject;
 
-namespace MicroFootball.Gameplay.Model
+namespace _Assets.Scripts.Gameplay
 {
     public sealed class GameplayModel
     {

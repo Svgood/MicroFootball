@@ -1,7 +1,8 @@
-﻿using MicroFootball.Gameplay.View;
+﻿using _Assets.Scripts.Gameplay.Ball;
+using _Assets.Scripts.Gameplay.Bot;
 using UnityEngine;
 
-namespace MicroFootball.Configs
+namespace _Assets.Scripts.Configs
 {
     [CreateAssetMenu(
         fileName = "PrefabsSettings",

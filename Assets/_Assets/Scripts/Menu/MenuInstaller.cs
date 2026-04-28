@@ -1,11 +1,9 @@
-using MicroFootball.Configs;
-using MicroFootball.Menu.Model;
-using MicroFootball.Menu.Presenter;
-using MicroFootball.Menu.View;
+using _Assets.Scripts.Common;
+using _Assets.Scripts.Configs;
 using UnityEngine;
 using Zenject;
 
-namespace MicroFootball.Menu.Installers
+namespace _Assets.Scripts.Menu
 {
     public sealed class MenuInstaller : MonoInstaller
     {
@@ -14,6 +12,7 @@ namespace MicroFootball.Menu.Installers
 
         public override void InstallBindings()
         {
+            Container.Rebind<CustomDisposable>().AsSingle();
             Container.BindInstance(_settings).IfNotBound();
             Container.BindInstance(_view).IfNotBound();
 
