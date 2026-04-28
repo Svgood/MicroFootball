@@ -8,6 +8,7 @@ namespace MicroFootball.Gameplay.Model
 {
     public sealed class GameplayModel
     {
+        private readonly BotCollisionModel _botCollisionModel;
         private readonly ReactiveProperty<int> _leftScore = new ReactiveProperty<int>(0);
         private readonly ReactiveProperty<int> _rightScore = new ReactiveProperty<int>(0);
 
@@ -20,8 +21,11 @@ namespace MicroFootball.Gameplay.Model
 
         public GameplayModel(
             IGameplayPositionsProvider gameplayPositionsProvider,
-            BallModel ball, IBotFacadeFactory botFacadeFactory)
+            BallModel ball,
+            IBotFacadeFactory botFacadeFactory,
+            BotCollisionModel botCollisionModel)
         {
+            _botCollisionModel = botCollisionModel;
             LeftBot = botFacadeFactory.Create(gameplayPositionsProvider.Bot1StartingPosition, gameplayPositionsProvider.Bot2StartingPosition).Model;
             RightBot = botFacadeFactory.Create(gameplayPositionsProvider.Bot2StartingPosition, gameplayPositionsProvider.Bot1StartingPosition).Model;;
             Ball = ball;
@@ -29,8 +33,9 @@ namespace MicroFootball.Gameplay.Model
 
         public void Tick(float dt)
         {
-            LeftBot.Tick(dt, Ball.Position.Value);
-            RightBot.Tick(dt, Ball.Position.Value);
+            LeftBot.Tick(dt, Ball.GroundPosition);
+            RightBot.Tick(dt, Ball.GroundPosition);
+            _botCollisionModel.Resolve(LeftBot, RightBot, dt);
             Ball.Tick(dt);
             TryHandleGoal();
         }

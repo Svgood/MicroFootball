@@ -20,8 +20,14 @@ namespace MicroFootball.Gameplay.Model
         private readonly Vector2 _fieldSize;
         private readonly float _goalHalfHeight;
 
-        public readonly ReactiveProperty<Vector2> Position;
-        public readonly ReactiveProperty<Vector2> Velocity;
+        private const float Gravity = 9.81f;
+        private const float WallRestitution = 0.85f;
+        private const float GroundRestitution = 0.55f;
+        private const float MinBounceVelocity = 0.2f;
+
+        public readonly ReactiveProperty<Vector3> Position;
+        public readonly ReactiveProperty<Vector3> Velocity;
+        public Vector2 GroundPosition => new Vector2(Position.Value.x, Position.Value.z);
 
         public float Radius => _radius;
 
@@ -32,44 +38,59 @@ namespace MicroFootball.Gameplay.Model
             _linearDamping = gameplaySettings.BallLinearDamping;
             _fieldSize = gameplaySettings.FieldSize;
             _goalHalfHeight = gameplaySettings.GoalHalfHeight;
-            Position = new ReactiveProperty<Vector2>(Vector2.zero);
-            Velocity = new ReactiveProperty<Vector2>(Vector2.zero);
+            Position = new ReactiveProperty<Vector3>(Vector3.zero);
+            Velocity = new ReactiveProperty<Vector3>(Vector3.zero);
         }
 
-        public void Kick(Vector2 direction, float force)
+        public void Kick(Vector3 direction, float force)
         {
+            if (direction.sqrMagnitude <= 0.0001f)
+            {
+                return;
+            }
+
             Velocity.Value += direction.normalized * force;
         }
 
         public void Tick(float dt)
         {
-            Position.Value += Velocity.Value * dt;
-            Velocity.Value = Vector2.Lerp(Velocity.Value, Vector2.zero, _linearDamping * dt);
+            var velocity = Velocity.Value;
+            velocity += Vector3.down * Gravity * dt;
+
+            var horizontalVelocity = new Vector3(velocity.x, 0f, velocity.z);
+            horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, _linearDamping * dt);
+            velocity.x = horizontalVelocity.x;
+            velocity.z = horizontalVelocity.z;
+
+            Position.Value += velocity * dt;
+            Velocity.Value = velocity;
             ClampInsidePitch();
         }
 
         public void Reset()
         {
-            Position.Value = _gameplayPositionsProvider.BallStartingPosition;
-            Velocity.Value = Vector2.zero;
+            var startPosition = _gameplayPositionsProvider.BallStartingPosition;
+            startPosition.y = Mathf.Max(_radius, startPosition.y);
+            Position.Value = startPosition;
+            Velocity.Value = Vector3.zero;
         }
 
         public GoalSide GetGoalSide()
         {
-            var halfWidth = _fieldSize.x * 0.5f;
             var ballPosition = Position.Value;
+            var leftGoalPosition = _gameplayPositionsProvider.Bot1StartingPosition;
+            var rightGoalPosition = _gameplayPositionsProvider.Bot2StartingPosition;
+            var leftGoalX = Mathf.Min(leftGoalPosition.x, rightGoalPosition.x);
+            var rightGoalX = Mathf.Max(leftGoalPosition.x, rightGoalPosition.x);
 
-            if (Mathf.Abs(ballPosition.y) > _goalHalfHeight)
-            {
-                return GoalSide.None;
-            }
-
-            if (ballPosition.x <= -halfWidth + _radius)
+            if (Mathf.Abs(ballPosition.z - leftGoalPosition.z) <= _goalHalfHeight &&
+                ballPosition.x <= leftGoalX + _radius)
             {
                 return GoalSide.Left;
             }
 
-            if (ballPosition.x >= halfWidth - _radius)
+            if (Mathf.Abs(ballPosition.z - rightGoalPosition.z) <= _goalHalfHeight &&
+                ballPosition.x >= rightGoalX - _radius)
             {
                 return GoalSide.Right;
             }
@@ -87,13 +108,26 @@ namespace MicroFootball.Gameplay.Model
             if (position.x <= -halfWidth || position.x >= halfWidth)
             {
                 position.x = Mathf.Clamp(position.x, -halfWidth, halfWidth);
-                velocity.x = -velocity.x;
+                velocity.x = -velocity.x * WallRestitution;
             }
 
-            if (position.y <= -halfHeight || position.y >= halfHeight)
+            if (position.z <= -halfHeight || position.z >= halfHeight)
             {
-                position.y = Mathf.Clamp(position.y, -halfHeight, halfHeight);
-                velocity.y = -velocity.y;
+                position.z = Mathf.Clamp(position.z, -halfHeight, halfHeight);
+                velocity.z = -velocity.z * WallRestitution;
+            }
+
+            if (position.y <= _radius)
+            {
+                position.y = _radius;
+                if (velocity.y < 0f)
+                {
+                    velocity.y = -velocity.y * GroundRestitution;
+                    if (velocity.y < MinBounceVelocity)
+                    {
+                        velocity.y = 0f;
+                    }
+                }
             }
 
             Position.Value = position;

@@ -5,6 +5,8 @@ namespace MicroFootball.Gameplay.View
 {
     public sealed class GameplayView : MonoBehaviour, IGameplayPositionsProvider
     {
+        [SerializeField] private GameObject _field;
+        
         [SerializeField] private Transform _bot1StartingPosition;
         [SerializeField] private Transform _bot2StartingPosition;
         [SerializeField] private Transform _ballStartingPosition;
@@ -12,6 +14,8 @@ namespace MicroFootball.Gameplay.View
         public Vector3 Bot1StartingPosition => _bot1StartingPosition.position;
         public Vector3 Bot2StartingPosition => _bot2StartingPosition.position;
         public Vector3 BallStartingPosition => _ballStartingPosition.position;
+        
+        public GameObject Field => _field;
 
         private void Awake()
         {

@@ -13,6 +13,10 @@ namespace MicroFootball.Configs
 
         [Header("Bot")]
         [SerializeField] private float _botSpeed = 4f;
+        [SerializeField] private float _botCollisionRadius = 0.6f;
+        [SerializeField] private float _botCollisionKnockbackForce = 3.5f;
+        [SerializeField] private float _botCollisionKnockbackDamping = 8f;
+        [SerializeField] private float _botCollisionKnockbackCooldown = 0.12f;
         [SerializeField] private float _botKickRange = 0.8f;
         [SerializeField] private float _botKickForce = 8f;
         [SerializeField] private float _botKickCooldown = 0.35f;
@@ -24,6 +28,10 @@ namespace MicroFootball.Configs
         public Vector2 FieldSize => _fieldSize;
         public float GoalHalfHeight => _goalHalfHeight;
         public float BotSpeed => _botSpeed;
+        public float BotCollisionRadius => _botCollisionRadius;
+        public float BotCollisionKnockbackForce => _botCollisionKnockbackForce;
+        public float BotCollisionKnockbackDamping => _botCollisionKnockbackDamping;
+        public float BotCollisionKnockbackCooldown => _botCollisionKnockbackCooldown;
         public float BotKickRange => _botKickRange;
         public float BotKickForce => _botKickForce;
         public float BotKickCooldown => _botKickCooldown;

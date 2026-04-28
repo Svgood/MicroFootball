@@ -24,6 +24,7 @@ namespace MicroFootball.Gameplay.Installers
 
             Container.BindInterfacesAndSelfTo<GameplayModel>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameplayPresenter>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<BotCollisionModel>().AsSingle();
             
             Container.BindInterfacesAndSelfTo<BallModel>().AsSingle();
             Container.BindInterfacesAndSelfTo<BallPresenter>().AsSingle().NonLazy();

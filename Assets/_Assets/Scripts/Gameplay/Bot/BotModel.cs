@@ -25,24 +25,30 @@ namespace MicroFootball.Gameplay.Model
         private readonly GameplaySettings _gameplaySettings;
         private readonly Vector2 _spawnPosition;
         private readonly float _speed;
+        private readonly float _knockbackDamping;
         private float _kickCooldownLeft;
+        private Vector2 _knockbackVelocity;
 
         public readonly ReactiveProperty<Vector2> Position;
         public Vector2 EnemyGoalPosition { get; }
 
         public BotModel(BotInitDTO botInitDto, BallModel ballModel, GameplaySettings gameplaySettings)
         {
-            _spawnPosition = botInitDto.SpawnPosition;
+            _spawnPosition = new Vector2(botInitDto.SpawnPosition.x, botInitDto.SpawnPosition.z);
             _speed = gameplaySettings.BotSpeed;
+            _knockbackDamping = gameplaySettings.BotCollisionKnockbackDamping;
             _ballModel = ballModel;
             _gameplaySettings = gameplaySettings;
             
-            EnemyGoalPosition = botInitDto.EnemyGoalPosition;
-            Position = new ReactiveProperty<Vector2>(botInitDto.SpawnPosition);
+            EnemyGoalPosition = new Vector2(botInitDto.EnemyGoalPosition.x, botInitDto.EnemyGoalPosition.z);
+            Position = new ReactiveProperty<Vector2>(_spawnPosition);
         }
 
         public void Tick(float dt, Vector2 ballPosition)
         {
+            Position.Value += _knockbackVelocity * dt;
+            _knockbackVelocity = Vector2.Lerp(_knockbackVelocity, Vector2.zero, _knockbackDamping * dt);
+
             var direction = ballPosition - Position.Value;
             if (direction.sqrMagnitude > 0.0001f)
             {
@@ -66,25 +72,32 @@ namespace MicroFootball.Gameplay.Model
 
         public void TryKick()
         {
-            if (!CanKick(_gameplaySettings.BotKickRange, _ballModel.Position.Value))
+            if (!CanKick(_gameplaySettings.BotKickRange, _ballModel.GroundPosition))
             {
                 return;
             }
 
-            var kickDirection = EnemyGoalPosition - _ballModel.Position.Value;
-            if (kickDirection.sqrMagnitude <= 0.0001f)
+            var groundKickDirection = EnemyGoalPosition - _ballModel.GroundPosition;
+            if (groundKickDirection.sqrMagnitude <= 0.0001f)
             {
                 return;
             }
 
+            var kickDirection = new Vector3(groundKickDirection.x, 0.35f, groundKickDirection.y);
             _ballModel.Kick(kickDirection, _gameplaySettings.BotKickForce);
-            StartKickCooldown(_gameplaySettings.BotKickCooldown);
+            StartKickCooldown(_gameplaySettings.BotKickCooldown + Random.Range(-0.5f, 0.5f));
+        }
+
+        public void ApplyKnockback(Vector2 impulse)
+        {
+            _knockbackVelocity += impulse;
         }
 
         public void Reset()
         {
             Position.Value = _spawnPosition;
             _kickCooldownLeft = 0f;
+            _knockbackVelocity = Vector2.zero;
         }
     }
 }

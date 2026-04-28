@@ -12,14 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7743971b68a5db24ea45d58706203eaa, type: 3}
   m_Name: GameplaySettings
   m_EditorClassIdentifier: Assembly-CSharp::MicroFootball.Configs.GameplaySettings
-  _fieldSize: {x: 12, y: 7}
+  _fieldSize: {x: 20, y: 10}
   _goalHalfHeight: 1.5
   _botSpeed: 4
   _botKickRange: 0.8
   _botKickForce: 8
-  _botKickCooldown: 0.35
-  _leftBotSpawn: {x: -3, y: 0}
-  _rightBotSpawn: {x: 3, y: 0}
+  _botKickCooldown: 1
   _ballRadius: 0.3
   _ballLinearDamping: 1.4
-  _ballSpawn: {x: 0, y: 0}
