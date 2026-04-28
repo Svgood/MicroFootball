@@ -6,7 +6,7 @@ namespace MicroFootball.Gameplay.View
     {
         [SerializeField] private Transform _targetTransform;
 
-        public Vector2 Position 
+        public Vector3 Position 
         {
             set => _targetTransform.position = value;
         }

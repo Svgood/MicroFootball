@@ -17,7 +17,7 @@ namespace MicroFootball.Gameplay.Model
         private readonly IGameplayPositionsProvider _gameplayPositionsProvider;
         private readonly float _linearDamping;
         private readonly float _radius;
-        private readonly Vector2 _fieldSize;
+        private readonly Vector3 _fieldSize;
         private readonly float _goalHalfHeight;
 
         private const float Gravity = 9.81f;
@@ -27,7 +27,7 @@ namespace MicroFootball.Gameplay.Model
 
         public readonly ReactiveProperty<Vector3> Position;
         public readonly ReactiveProperty<Vector3> Velocity;
-        public Vector2 GroundPosition => new Vector2(Position.Value.x, Position.Value.z);
+        public Vector3 GroundPosition => new Vector3(Position.Value.x, 0f, Position.Value.z);
 
         public float Radius => _radius;
 
@@ -101,7 +101,7 @@ namespace MicroFootball.Gameplay.Model
         private void ClampInsidePitch()
         {
             var halfWidth = _fieldSize.x * 0.5f - _radius;
-            var halfHeight = _fieldSize.y * 0.5f - _radius;
+            var halfHeight = _fieldSize.z * 0.5f - _radius;
             var position = Position.Value;
             var velocity = Velocity.Value;
 

@@ -16,7 +16,7 @@ namespace MicroFootball.Gameplay.Presenter
             _model = model;
             _view = view;
 
-            _view.Field.transform.localScale = new Vector3(settings.FieldSize.x, 1, settings.FieldSize.y);
+            _view.Field.transform.localScale = new Vector3(settings.FieldSize.x, 1, settings.FieldSize.z);
         }
 
         public void Tick()

@@ -10,7 +10,7 @@ namespace MicroFootball.Gameplay.Model
         private readonly float _botCollisionRadius;
         private readonly float _knockbackForce;
         private readonly float _knockbackCooldown;
-        private readonly Vector2 _fieldSize;
+        private readonly Vector3 _fieldSize;
         private float _knockbackCooldownLeft;
 
         public BotCollisionModel(GameplaySettings gameplaySettings)
@@ -27,7 +27,7 @@ namespace MicroFootball.Gameplay.Model
 
             var firstPosition = firstBot.Position.Value;
             var secondPosition = secondBot.Position.Value;
-            var delta = secondPosition - firstPosition;
+            var delta = new Vector3(secondPosition.x - firstPosition.x, 0f, secondPosition.z - firstPosition.z);
             var distance = delta.magnitude;
             var minDistance = _botCollisionRadius * 2f;
 
@@ -36,7 +36,7 @@ namespace MicroFootball.Gameplay.Model
                 return;
             }
 
-            var separationDirection = distance > Epsilon ? delta / distance : Vector2.right;
+            var separationDirection = distance > Epsilon ? delta / distance : Vector3.right;
             var penetrationDepth = minDistance - distance;
             var correction = separationDirection * (penetrationDepth * 0.5f);
 
@@ -52,24 +52,25 @@ namespace MicroFootball.Gameplay.Model
             }
 
             var randomAngle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
-            var randomDirection = new Vector2(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle));
+            var randomDirection = new Vector3(Mathf.Cos(randomAngle), 0f, Mathf.Sin(randomAngle));
             if (randomDirection.sqrMagnitude <= Epsilon)
             {
                 randomDirection = separationDirection;
             }
 
-            firstBot.ApplyKnockback(randomDirection.normalized * _knockbackForce);
-            secondBot.ApplyKnockback(-randomDirection.normalized * _knockbackForce);
+            var knockDirection = Vector3.Lerp(separationDirection, randomDirection.normalized, 0.65f).normalized;
+            firstBot.ApplyKnockback(knockDirection * _knockbackForce);
+            secondBot.ApplyKnockback(-knockDirection * _knockbackForce);
             _knockbackCooldownLeft = _knockbackCooldown;
         }
 
-        private Vector2 ClampInsidePitch(Vector2 position)
+        private Vector3 ClampInsidePitch(Vector3 position)
         {
             var halfWidth = _fieldSize.x * 0.5f - _botCollisionRadius;
-            var halfHeight = _fieldSize.y * 0.5f - _botCollisionRadius;
-            return new Vector2(
-                Mathf.Clamp(position.x, -halfWidth, halfWidth),
-                Mathf.Clamp(position.y, -halfHeight, halfHeight));
+            var halfHeight = _fieldSize.z * 0.5f - _botCollisionRadius;
+            position.x = Mathf.Clamp(position.x, -halfWidth, halfWidth);
+            position.z = Mathf.Clamp(position.z, -halfHeight, halfHeight);
+            return position;
         }
     }
 }
