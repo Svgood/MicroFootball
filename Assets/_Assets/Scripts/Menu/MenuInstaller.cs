@@ -18,6 +18,7 @@ namespace _Assets.Scripts.Menu
 
             Container.Bind<MenuModel>().AsSingle();
             Container.BindInterfacesTo<MenuPresenter>().AsSingle().NonLazy();
+            Container.BindInterfacesTo<MenuTrigger>().AsSingle();
         }
     }
 }

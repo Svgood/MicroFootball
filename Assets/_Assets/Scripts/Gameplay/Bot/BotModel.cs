@@ -6,6 +6,11 @@ using UnityEngine;
 
 namespace _Assets.Scripts.Gameplay.Bot
 {
+    public interface IBotModel
+    {
+        Vector3 EnemyGoalPosition { get; }
+    }
+    
     public class BotModelFactory : CustomFactory<BotInitDTO, BotModel, BotModel> { }
 
     public struct BotInitDTO
@@ -20,7 +25,7 @@ namespace _Assets.Scripts.Gameplay.Bot
         public Vector3 EnemyGoalPosition { get; }
     }
     
-    public sealed class BotModel
+    public sealed class BotModel : IBotModel
     {
         private readonly BallModel _ballModel;
         private readonly GameplaySettings _gameplaySettings;
@@ -68,7 +73,7 @@ namespace _Assets.Scripts.Gameplay.Bot
             TryKick();
         }
 
-        public bool CanKick(float kickRange, Vector3 ballPosition)
+        private bool CanKick(float kickRange, Vector3 ballPosition)
         {
             var delta = new Vector3(
                 ballPosition.x - Position.Value.x,
@@ -77,12 +82,12 @@ namespace _Assets.Scripts.Gameplay.Bot
             return _kickCooldownLeft <= 0f && delta.magnitude <= kickRange;
         }
 
-        public void StartKickCooldown(float cooldownSeconds)
+        private void StartKickCooldown(float cooldownSeconds)
         {
             _kickCooldownLeft = cooldownSeconds;
         }
 
-        public void TryKick()
+        private void TryKick()
         {
             if (!CanKick(_gameplaySettings.BotKickRange, _ballModel.GroundPosition))
             {

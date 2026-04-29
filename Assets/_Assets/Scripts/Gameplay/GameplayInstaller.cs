@@ -18,13 +18,14 @@ namespace _Assets.Scripts.Gameplay
             Container.BindInterfacesAndSelfTo<CustomDisposable>().AsSingle();
             Container.BindInstance(_settings);
             Container.BindInstance(_prefabsSettings);
-            Container.BindInterfacesAndSelfTo<GameplayView>().FromInstance(Instantiate(_gameplayView));
+            
+            Container.BindInterfacesAndSelfTo<GameplayView>()
+                .FromInstance(Instantiate(_gameplayView));
 
-            Container.Bind<IBotFacadeFactory>().To<BotFactory>().AsSingle();
+            BotInstaller.Install(Container);
 
             Container.BindInterfacesAndSelfTo<GameplayModel>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameplayPresenter>().AsSingle().NonLazy();
-            Container.BindInterfacesAndSelfTo<BotCollisionModel>().AsSingle();
             
             Container.BindInterfacesAndSelfTo<BallModel>().AsSingle();
             Container.BindInterfacesAndSelfTo<BallPresenter>().AsSingle().NonLazy();

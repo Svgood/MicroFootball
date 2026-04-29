@@ -9,20 +9,26 @@ using Object = UnityEngine.Object;
 
 namespace _Assets.Scripts.Menu
 {
-    public sealed class MenuPresenter : IInitializable
+    public class PanelPresenter<T>
+    {
+    }
+    
+    public sealed class MenuPresenter : PanelPresenter<MenuView>, IInitializable
     {
         private readonly MenuModel _model;
         private readonly MenuView _view;
         private readonly MenuSettings _settings;
         private readonly ISceneService _sceneService;
         private readonly CustomDisposable _customDisposable;
-
+        private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
+        
         public MenuPresenter(
             MenuModel model,
             MenuView view,
             MenuSettings settings,
             ISceneService sceneService,
-            CustomDisposable customDisposable)
+            CustomDisposable customDisposable,
+            SignalBus signalBus)
         {
             _model = model;
             _view = Object.Instantiate(view);
@@ -35,20 +41,22 @@ namespace _Assets.Scripts.Menu
         {
             _view.StartClicked
                 .Subscribe(_ => _model.RequestStart())
-                .AddTo(_customDisposable);
+                .AddTo(_compositeDisposable);
 
             _model.StartRequested
                 .Subscribe(_ => _sceneService.LoadGameplay())
-                .AddTo(_customDisposable);
+                .AddTo(_compositeDisposable);
 
             if (_settings.Autostart)
             {
                 Observable.Timer(TimeSpan.FromSeconds(_settings.AutostartDelaySeconds))
                     .Subscribe(_ => _model.RequestStart())
-                    .AddTo(_customDisposable);
+                    .AddTo(_compositeDisposable);
             }
 
             _customDisposable.OnDisposal(() => Debug.Log("MenuPresenter disposed"));
         }
     }
+
+
 }

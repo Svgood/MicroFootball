@@ -3,6 +3,12 @@ using UnityEngine.SceneManagement;
 
 namespace _Assets.Scripts.Services
 {
+    public interface ISceneService
+    {
+        void LoadMenu();
+        void LoadGameplay();
+    }
+    
     public sealed class SceneService : ISceneService
     {
         private readonly ApplicationSettings _settings;

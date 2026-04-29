@@ -9,9 +9,6 @@ namespace _Assets.Scripts.Menu
     {
         [SerializeField] private Button _startButton;
 
-        public IObservable<Unit> StartClicked =>
-            _startButton != null
-                ? _startButton.OnClickAsObservable()
-                : Observable.Never<Unit>();
+        public IObservable<Unit> StartClicked => _startButton.OnClickAsObservable();
     }
 }
