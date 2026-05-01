@@ -27,8 +27,7 @@ namespace _Assets.Scripts.Menu
             MenuView view,
             MenuSettings settings,
             ISceneService sceneService,
-            CustomDisposable customDisposable,
-            SignalBus signalBus)
+            CustomDisposable customDisposable)
         {
             _model = model;
             _view = Object.Instantiate(view);
