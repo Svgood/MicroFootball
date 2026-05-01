@@ -20,7 +20,6 @@ namespace _Assets.Scripts.Menu
         private readonly MenuSettings _settings;
         private readonly ISceneService _sceneService;
         private readonly CustomDisposable _customDisposable;
-        private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
         
         public MenuPresenter(
             MenuModel model,
@@ -40,17 +39,17 @@ namespace _Assets.Scripts.Menu
         {
             _view.StartClicked
                 .Subscribe(_ => _model.RequestStart())
-                .AddTo(_compositeDisposable);
+                .AddTo(_customDisposable);
 
             _model.StartRequested
                 .Subscribe(_ => _sceneService.LoadGameplay())
-                .AddTo(_compositeDisposable);
+                .AddTo(_customDisposable);
 
             if (_settings.Autostart)
             {
                 Observable.Timer(TimeSpan.FromSeconds(_settings.AutostartDelaySeconds))
                     .Subscribe(_ => _model.RequestStart())
-                    .AddTo(_compositeDisposable);
+                    .AddTo(_customDisposable);
             }
 
             _customDisposable.OnDisposal(() => Debug.Log("MenuPresenter disposed"));
