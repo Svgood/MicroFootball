@@ -4,7 +4,13 @@ using Zenject;
 
 namespace _Assets.Scripts.Menu
 {
-    public class MenuTrigger 
+    public interface IMenuTrigger
+    {
+        IObservable<Unit> StartRequested { get; }
+        void RequestStart();
+    }
+    
+    public class MenuTrigger : IMenuTrigger
     {
         private Subject<Unit> _startRequested = new Subject<Unit>();
         

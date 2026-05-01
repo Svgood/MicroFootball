@@ -12,8 +12,9 @@ namespace _Assets.Scripts.Application
 
         public override void InstallBindings()
         {
+            Container.BindInstance(_settings);
+            
             Container.BindInterfacesAndSelfTo<CustomDisposable>().AsSingle();
-            Container.BindInstance(_settings).IfNotBound();
             Container.BindInterfacesAndSelfTo<SceneService>().AsSingle().NonLazy();
         }
     }

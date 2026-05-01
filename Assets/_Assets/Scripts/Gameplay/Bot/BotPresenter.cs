@@ -25,7 +25,7 @@ namespace _Assets.Scripts.Gameplay.Bot
                 .Subscribe(position => _view.Position = position)
                 .AddTo(_customDisposable);
             
-            _view.OnCollisionEnter
+            _view.OnCollision
                 .Subscribe(_ => DoThing())
                 .AddTo(_customDisposable);
         }

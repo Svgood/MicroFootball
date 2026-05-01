@@ -9,20 +9,20 @@ namespace _Assets.Scripts.Gameplay.Bot
 {
     public sealed class BotView : MonoBehaviour
     {
-        private Subject<Unit> _onCollisionEnter = new Subject<Unit>();
+        private Subject<Collision> _onCollisionEnter = new Subject<Collision>();
         
         [SerializeField] private Transform _targetTransform;
         
-        public IObservable<Unit> OnCollisionEnter => _onCollisionEnter;
+        public IObservable<Collision> OnCollision => _onCollisionEnter;
 
         public Vector3 Position 
         {
             set => _targetTransform.position = value;
         }
 
-        void OnCollisionEnter2D(Collision2D other)
+        private void OnCollisionEnter(Collision other)
         {
-            _onCollisionEnter.OnNext(Unit.Default);
+            _onCollisionEnter.OnNext(other);
         }
     }
 }

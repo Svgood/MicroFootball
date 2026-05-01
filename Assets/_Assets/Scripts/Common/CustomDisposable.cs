@@ -1,11 +1,16 @@
 using System;
+using System.Threading;
 using UniRx;
 
 namespace _Assets.Scripts.Common
 {
     public sealed class CustomDisposable : IDisposable
     {
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
+        private bool _disposed;
+
+        public CancellationToken CancellationToken => _cancellationTokenSource.Token;
 
         public void Add(IDisposable disposable)
         {
@@ -26,7 +31,13 @@ namespace _Assets.Scripts.Common
 
         public void Dispose()
         {
+            if (_disposed)
+                return;
+            _disposed = true;
+
+            _cancellationTokenSource.Cancel();
             _compositeDisposable.Dispose();
+            _cancellationTokenSource.Dispose();
         }
     }
 
