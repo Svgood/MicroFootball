@@ -4,7 +4,7 @@ using Zenject;
 
 namespace _Assets.Scripts.Gameplay
 {
-    public sealed class GameplayPresenter : ITickable
+    public sealed class GameplayPresenter : ITickable, IFixedTickable, IInitializable
     {
         private readonly GameplayModel _model;
         private readonly GameplayView _view;
@@ -20,6 +20,16 @@ namespace _Assets.Scripts.Gameplay
         public void Tick()
         {
             _model.Tick(Time.deltaTime);
+        }
+
+        public void FixedTick()
+        {
+            
+        }
+
+        public void Initialize()
+        {
+            
         }
     }
 }
